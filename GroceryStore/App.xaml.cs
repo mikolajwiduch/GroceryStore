@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using GroceryStore.ViewModels;
+using GroceryStore.Views;
 
 namespace GroceryStore
 {
@@ -9,12 +9,8 @@ namespace GroceryStore
         {
             base.OnStartup(e);
 
-            var mainWindow = new MainWindow
-            {
-                DataContext = new MainViewModel()
-            };
-
-            mainWindow.Show();
+            var loginView = new LoginView();
+            loginView.Show();
         }
     }
 }

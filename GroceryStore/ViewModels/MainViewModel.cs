@@ -11,20 +11,18 @@ namespace GroceryStore.ViewModels
         public object CurrentView
         {
             get { return _currentView; }
-            set { _currentView = value; RaisePropertyChanged(nameof(CurrentView)); }
+            set { _currentView = value; RaisePropertyChanged(); }
         }
 
         public MainViewModel()
         {
-            Messenger.Default.Register<NavigateToProductsMessage>(OnNavigateToProductsMessage);
-
-            // Domyślnie wyświetl LoginViewModel
-            CurrentView = new LoginViewModel();
+            // Register to listen for navigation messages
+            Messenger.Default.Register<NavigateToProductsMessage>(this, OnNavigateToProductsMessage);
         }
 
         private void OnNavigateToProductsMessage(NavigateToProductsMessage message)
         {
-            // Zmiana widoku na ProductsViewModel
+            // Navigate to Products ViewModel
             CurrentView = new ProductsViewModel();
         }
     }
