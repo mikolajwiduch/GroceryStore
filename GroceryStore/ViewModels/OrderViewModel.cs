@@ -8,7 +8,7 @@ namespace GroceryStore.ViewModels
 
         public OrderViewModel()
         {
-            PlaceOrderCommand = new RelayCommand(param => PlaceOrder());
+           // PlaceOrderCommand = new RelayCommand(param => PlaceOrder());
         }
 
         private void PlaceOrder()

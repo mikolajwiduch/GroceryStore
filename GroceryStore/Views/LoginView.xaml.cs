@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using GroceryStore.ViewModels;
+using System.Windows;
 using System.Windows.Controls;
-using GroceryStore.ViewModels;
 
 namespace GroceryStore.Views
 {
@@ -12,6 +12,7 @@ namespace GroceryStore.Views
             DataContext = new LoginViewModel(); // Przypisz ViewModel
         }
 
+        // Metoda obsługi zmiany hasła w PasswordBox
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is LoginViewModel viewModel)
