@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroceryStore.Models
 {
     public class Product
     {
         public string Name { get; set; }
-        public int Quantity { get; set; }
         public decimal Price { get; set; }
-
-        public Product(string name, int quantity, decimal price)
-        {
-            Name = name;
-            Quantity = quantity;
-            Price = price;
-        }
+        public string Category { get; set; }
+        public int Quantity { get; set; }
 
         public static List<Product> LoadProducts(string filePath)
         {
@@ -28,12 +18,10 @@ namespace GroceryStore.Models
             foreach (var line in lines)
             {
                 var values = line.Split(',');
-                var product = new Product(values[0], int.Parse(values[1]), decimal.Parse(values[2]));
-                products.Add(product);
+                products.Add(new Product { Name = values[0], Price = decimal.Parse(values[1]), Category = values[2], Quantity = int.Parse(values[3]) });
             }
 
             return products;
         }
     }
-
 }

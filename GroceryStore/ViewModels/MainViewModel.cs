@@ -1,26 +1,33 @@
-﻿using GroceryStore.Models;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows.Input;
 
 namespace GroceryStore.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : BaseViewModel
     {
-        public ObservableCollection<Product> Products { get; set; }
-        public Order CurrentOrder { get; set; }
+        private object _currentView;
+
+        public object CurrentView
+        {
+            get { return _currentView; }
+            set { _currentView = value; OnPropertyChanged(nameof(CurrentView)); }
+        }
+
+        public ICommand NavigateToProductsCommand => new RelayCommand(NavigateToProducts);
+        public ICommand NavigateToOrderCommand => new RelayCommand(NavigateToOrder);
+
+        private void NavigateToProducts()
+        {
+            CurrentView = new ProductsViewModel();
+        }
+
+        private void NavigateToOrder()
+        {
+            CurrentView = new OrderViewModel();
+        }
 
         public MainViewModel()
         {
-            Products = new ObservableCollection<Product>(Product.LoadProducts("Data/products.csv"));
-            CurrentOrder = new Order();
+            CurrentView = new ProductsViewModel();  // Default to Products view
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
-
 }

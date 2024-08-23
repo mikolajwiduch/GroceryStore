@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace GroceryStore.Models
 {
@@ -23,8 +19,7 @@ namespace GroceryStore.Models
 
         public void FinalizeOrder()
         {
-            // Logika finalizacji zamówienia
+            // Finalize the order, e.g., save to CSV or database
         }
     }
-
 }

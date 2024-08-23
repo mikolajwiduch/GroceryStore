@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Grocery Store" Height="450" Width="800">
     <Grid>
-        <ListBox ItemsSource="{Binding Products}" DisplayMemberPath="Name"/>
-        <Button Content="Add to Order" Command="{Binding AddToOrderCommand}"/>
-        <Button Content="Finalize Order" Command="{Binding FinalizeOrderCommand}"/>
+        <StackPanel Orientation="Vertical">
+            <Button Content="Products" Width="100" Command="{Binding NavigateToProductsCommand}"/>
+            <Button Content="Create Order" Width="100" Command="{Binding NavigateToOrderCommand}" Margin="0,50,0,0"/>
+            <Frame x:Name="MainFrame" Content="{Binding CurrentView}"/>
+        </StackPanel>
     </Grid>
 </Window>
