@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using System.Windows.Input;
 
 namespace GroceryStore.ViewModels
 {
@@ -12,22 +13,20 @@ namespace GroceryStore.ViewModels
             set { _currentView = value; OnPropertyChanged(nameof(CurrentView)); }
         }
 
-        public ICommand NavigateToProductsCommand => new RelayCommand(NavigateToProducts);
-        public ICommand NavigateToOrderCommand => new RelayCommand(NavigateToOrder);
+        // Komenda z parametrem
+        public ICommand NavigateToViewCommand => new RelayCommand<object>(NavigateToView);
 
-        private void NavigateToProducts()
+        private void NavigateToView(object viewModel)
         {
-            CurrentView = new ProductsViewModel();
-        }
-
-        private void NavigateToOrder()
-        {
-            CurrentView = new OrderViewModel();
+            if (viewModel is BaseViewModel vm)
+            {
+                CurrentView = vm;
+            }
         }
 
         public MainViewModel()
         {
-            CurrentView = new ProductsViewModel();  // Default to Products view
+            CurrentView = new ProductsViewModel();  // Domyślnie produkty
         }
     }
 }

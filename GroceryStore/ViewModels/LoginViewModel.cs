@@ -1,30 +1,59 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
-using GroceryStore.Models;
-using GroceryStore.Views;
 
 namespace GroceryStore.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+    public class LoginViewModel : INotifyPropertyChanged
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        private string _username;
+        private string _password;
 
-        public ICommand LoginCommand => new RelayCommand(Login);
-
-        private void Login()
+        public string Username
         {
-            var users = User.LoadUsers("Data/users.csv");
-            if (User.Authenticate(Username, Password, users))
+            get => _username;
+            set
             {
-                MainWindow mainWindow = new MainWindow();
-                mainWindow.Show();
-                Application.Current.Windows[0].Close();  // Close the login window
+                _username = value;
+                OnPropertyChanged();
             }
-            else
+        }
+
+        public string Password
+        {
+            get => _password;
+            set
             {
-                MessageBox.Show("Invalid username or password.");
+                _password = value;
+                OnPropertyChanged();
             }
+        }
+
+        public ICommand LoginCommand { get; private set; }
+
+        public LoginViewModel()
+        {
+            LoginCommand = new RelayCommand(param => ExecuteLogin(), param => CanExecuteLogin());
+        }
+
+        private void ExecuteLogin()
+        {
+            // Implementacja logiki logowania
+            MessageBox.Show($"Username: {Username}\nPassword: {Password}", "Login");
+        }
+
+        private bool CanExecuteLogin()
+        {
+            // Możesz dodać logikę do określenia, czy przycisk Login powinien być aktywny
+            return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace GroceryStore.Models
 {
@@ -7,18 +8,26 @@ namespace GroceryStore.Models
     {
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public string Category { get; set; }
+
         public int Quantity { get; set; }
 
-        public static List<Product> LoadProducts(string filePath)
+        // Załaduj produkty z pliku CSV
+        public static IEnumerable<Product> LoadProducts(string filePath)
         {
             var products = new List<Product>();
-            var lines = File.ReadAllLines(filePath);
 
-            foreach (var line in lines)
+            foreach (var line in File.ReadLines(filePath).Skip(1)) // Pomijamy nagłówek
             {
-                var values = line.Split(',');
-                products.Add(new Product { Name = values[0], Price = decimal.Parse(values[1]), Category = values[2], Quantity = int.Parse(values[3]) });
+                var columns = line.Split(',');
+
+                if (columns.Length == 2 && decimal.TryParse(columns[1], out var price))
+                {
+                    products.Add(new Product
+                    {
+                        Name = columns[0],
+                        Price = price
+                    });
+                }
             }
 
             return products;
