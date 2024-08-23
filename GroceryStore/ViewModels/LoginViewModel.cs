@@ -2,6 +2,9 @@
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
+using GroceryStore.Messages;
 
 namespace GroceryStore.ViewModels
 {
@@ -9,6 +12,7 @@ namespace GroceryStore.ViewModels
     {
         private string _username;
         private string _password;
+        private string _errorMessage;
 
         public string Username
         {
@@ -30,22 +34,44 @@ namespace GroceryStore.ViewModels
             }
         }
 
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set
+            {
+                _errorMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand LoginCommand { get; private set; }
 
         public LoginViewModel()
         {
-            LoginCommand = new RelayCommand(param => ExecuteLogin(), param => CanExecuteLogin());
+            LoginCommand = new RelayCommand(ExecuteLogin, CanExecuteLogin);
         }
 
         private void ExecuteLogin()
         {
-            // Implementacja logiki logowania
-            MessageBox.Show($"Username: {Username}\nPassword: {Password}", "Login");
+            if (IsValidUser(Username, Password))
+            {
+                Messenger.Default.Send(new NavigateToProductsMessage());
+            }
+            else
+            {
+                ErrorMessage = "Niepoprawna nazwa użytkownika lub hasło.";
+                MessageBox.Show(ErrorMessage, "Błąd logowania", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private bool IsValidUser(string username, string password)
+        {
+            // Logika sprawdzania poprawności użytkownika
+            return username == "user" && password == "password";
         }
 
         private bool CanExecuteLogin()
         {
-            // Możesz dodać logikę do określenia, czy przycisk Login powinien być aktywny
             return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
         }
 

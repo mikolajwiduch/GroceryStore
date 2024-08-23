@@ -1,32 +1,31 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using System.Windows.Input;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
+using GroceryStore.Messages;
 
 namespace GroceryStore.ViewModels
 {
-    public class MainViewModel : BaseViewModel
+    public class MainViewModel : ViewModelBase
     {
         private object _currentView;
 
         public object CurrentView
         {
             get { return _currentView; }
-            set { _currentView = value; OnPropertyChanged(nameof(CurrentView)); }
-        }
-
-        // Komenda z parametrem
-        public ICommand NavigateToViewCommand => new RelayCommand<object>(NavigateToView);
-
-        private void NavigateToView(object viewModel)
-        {
-            if (viewModel is BaseViewModel vm)
-            {
-                CurrentView = vm;
-            }
+            set { _currentView = value; RaisePropertyChanged(nameof(CurrentView)); }
         }
 
         public MainViewModel()
         {
-            CurrentView = new ProductsViewModel();  // Domyślnie produkty
+            Messenger.Default.Register<NavigateToProductsMessage>(OnNavigateToProductsMessage);
+
+            // Domyślnie wyświetl LoginViewModel
+            CurrentView = new LoginViewModel();
+        }
+
+        private void OnNavigateToProductsMessage(NavigateToProductsMessage message)
+        {
+            // Zmiana widoku na ProductsViewModel
+            CurrentView = new ProductsViewModel();
         }
     }
 }
