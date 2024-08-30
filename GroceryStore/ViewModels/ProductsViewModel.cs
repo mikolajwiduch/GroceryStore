@@ -1,15 +1,27 @@
-﻿using System.Collections.ObjectModel;
-using GroceryStore.Models;
+﻿using GroceryStore.Models;
+using GroceryStore.ViewModels;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
-namespace GroceryStore.ViewModels
+public class ProductsViewModel : BaseViewModel
 {
-    public class ProductsViewModel : BaseViewModel
-    {
-        public ObservableCollection<Product> Products { get; set; }
+    public ObservableCollection<Product> Products { get; }
+    public ObservableCollection<Product> Cart { get; }
 
-        public ProductsViewModel()
+    public ICommand AddToCartCommand { get; }
+
+    public ProductsViewModel(ObservableCollection<Product> cart)
+    {
+        Cart = cart;
+        Products = new ObservableCollection<Product>(Product.LoadProducts("Data/products.csv"));
+        AddToCartCommand = new RelayCommand(AddToCart);
+    }
+
+    private void AddToCart(object parameter)
+    {
+        if (parameter is Product product)
         {
-            Products = new ObservableCollection<Product>(Product.LoadProducts("Data/products.csv"));
+            Cart.Add(product);
         }
     }
 }

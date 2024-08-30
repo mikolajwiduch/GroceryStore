@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
+using GroceryStore.Models;
 using GroceryStore.Views;
 
 namespace GroceryStore.ViewModels
@@ -21,21 +23,26 @@ namespace GroceryStore.ViewModels
 
         public MainViewModel()
         {
+            Cart = new ObservableCollection<Product>();
+
             NavigateToProductsCommand = new RelayCommand(ExecuteNavigateToProducts);
             NavigateToOrderCommand = new RelayCommand(ExecuteNavigateToOrder);
 
             // Set initial view
-            CurrentView = new ProductView();
+            ExecuteNavigateToProducts(null);
         }
 
         private void ExecuteNavigateToProducts(object parameter)
         {
-            CurrentView = new ProductView();
+            var productsViewModel = new ProductsViewModel(Cart);
+            CurrentView = new ProductView() { DataContext = productsViewModel };
         }
 
         private void ExecuteNavigateToOrder(object parameter)
         {
-            CurrentView = new OrderView();
+            var orderViewModel = new OrderViewModel(Cart);
+            CurrentView = new OrderView() { DataContext = orderViewModel };
         }
+
     }
 }

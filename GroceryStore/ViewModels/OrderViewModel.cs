@@ -1,19 +1,22 @@
-﻿using System.Windows.Input;
+﻿using GroceryStore.Models;
+using GroceryStore.ViewModels;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
-namespace GroceryStore.ViewModels
+public class OrderViewModel : BaseViewModel
 {
-    public class OrderViewModel : BaseViewModel
+    public ObservableCollection<Product> Cart { get; }
+
+    public ICommand FinalizeOrderCommand { get; }
+
+    public OrderViewModel(ObservableCollection<Product> cart)
     {
-        public ICommand PlaceOrderCommand { get; private set; }
+        Cart = cart;
+        FinalizeOrderCommand = new RelayCommand(FinalizeOrder);
+    }
 
-        public OrderViewModel()
-        {
-           // PlaceOrderCommand = new RelayCommand(param => PlaceOrder());
-        }
-
-        private void PlaceOrder()
-        {
-            // Implementacja logiki zamówienia
-        }
+    private void FinalizeOrder(object parameter)
+    {
+        // Implement logic to finalize the order
     }
 }
