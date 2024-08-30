@@ -18,6 +18,7 @@ namespace GroceryStore.ViewModels
             }
         }
 
+        public ObservableCollection<Product> Cart { get; set; }
         public ICommand NavigateToProductsCommand { get; }
         public ICommand NavigateToOrderCommand { get; }
 
@@ -28,7 +29,7 @@ namespace GroceryStore.ViewModels
             NavigateToProductsCommand = new RelayCommand(ExecuteNavigateToProducts);
             NavigateToOrderCommand = new RelayCommand(ExecuteNavigateToOrder);
 
-            // Set initial view
+            // Ustawienie widoku startowego na listę produktów
             ExecuteNavigateToProducts(null);
         }
 
@@ -40,9 +41,7 @@ namespace GroceryStore.ViewModels
 
         private void ExecuteNavigateToOrder(object parameter)
         {
-            var orderViewModel = new OrderViewModel(Cart);
-            CurrentView = new OrderView() { DataContext = orderViewModel };
+            CurrentView = new OrderView() { DataContext = new OrderViewModel(Cart) };
         }
-
     }
 }

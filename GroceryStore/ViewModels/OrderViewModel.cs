@@ -1,22 +1,25 @@
-﻿using GroceryStore.Models;
-using GroceryStore.ViewModels;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using GroceryStore.Models;
 
-public class OrderViewModel : BaseViewModel
+namespace GroceryStore.ViewModels
 {
-    public ObservableCollection<Product> Cart { get; }
-
-    public ICommand FinalizeOrderCommand { get; }
-
-    public OrderViewModel(ObservableCollection<Product> cart)
+    public class OrderViewModel : BaseViewModel
     {
-        Cart = cart;
-        FinalizeOrderCommand = new RelayCommand(FinalizeOrder);
-    }
+        public ObservableCollection<Product> Cart { get; }
+        public decimal TotalPrice => Cart.Sum(p => p.Price * p.Quantity);
 
-    private void FinalizeOrder(object parameter)
-    {
-        // Implement logic to finalize the order
+        public ICommand FinalizeOrderCommand { get; }
+
+        public OrderViewModel(ObservableCollection<Product> cart)
+        {
+            Cart = cart;
+            FinalizeOrderCommand = new RelayCommand(FinalizeOrder);
+        }
+
+        private void FinalizeOrder(object parameter)
+        {
+            // Logika finalizacji zamówienia (np. zapis do pliku lub bazy danych)
+        }
     }
 }

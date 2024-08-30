@@ -1,13 +1,16 @@
-﻿using System.Windows.Controls;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using GroceryStore.Models;
+using GroceryStore.ViewModels;
 
 namespace GroceryStore.Views
 {
     public partial class OrderView : UserControl
     {
-        public OrderView()
+        public OrderView(ObservableCollection<Product> cart)
         {
             InitializeComponent();
-            DataContext = new ViewModels.OrderViewModel();
+            DataContext = new OrderViewModel(cart);
         }
     }
 }
