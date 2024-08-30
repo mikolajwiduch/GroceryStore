@@ -58,6 +58,8 @@ namespace GroceryStore.ViewModels
             if (AuthenticateUser())
             {
                 OpenMainView();
+                var loginWindow = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w is LoginView);
+                loginWindow?.Close();
             }
             else
             {
@@ -74,9 +76,6 @@ namespace GroceryStore.ViewModels
         {
             var mainView = new MainView();
             mainView.Show();
-
-            // Zamknij okno logowania
-            Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive)?.Close();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
