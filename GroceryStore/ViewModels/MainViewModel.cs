@@ -1,29 +1,41 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
-using GroceryStore.Messages;
+﻿using System.Windows.Input;
+using GroceryStore.Views;
 
 namespace GroceryStore.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : BaseViewModel
     {
         private object _currentView;
-
         public object CurrentView
         {
-            get { return _currentView; }
-            set { _currentView = value; RaisePropertyChanged(); }
+            get => _currentView;
+            set
+            {
+                _currentView = value;
+                OnPropertyChanged();
+            }
         }
+
+        public ICommand NavigateToProductsCommand { get; }
+        public ICommand NavigateToOrderCommand { get; }
 
         public MainViewModel()
         {
-            // Register to listen for navigation messages
-            Messenger.Default.Register<NavigateToProductsMessage>(this, OnNavigateToProductsMessage);
+            NavigateToProductsCommand = new RelayCommand(ExecuteNavigateToProducts);
+            NavigateToOrderCommand = new RelayCommand(ExecuteNavigateToOrder);
+
+            // Set initial view
+            CurrentView = new ProductView();
         }
 
-        private void OnNavigateToProductsMessage(NavigateToProductsMessage message)
+        private void ExecuteNavigateToProducts(object parameter)
         {
-            // Navigate to Products ViewModel
-            CurrentView = new ProductsViewModel();
+            CurrentView = new ProductView();
+        }
+
+        private void ExecuteNavigateToOrder(object parameter)
+        {
+            CurrentView = new OrderView();
         }
     }
 }

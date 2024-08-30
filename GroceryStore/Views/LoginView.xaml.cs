@@ -9,19 +9,14 @@ namespace GroceryStore.Views
         public LoginView()
         {
             InitializeComponent();
-            DataContext = new LoginViewModel(); // Przypisz ViewModel
+            DataContext = new LoginViewModel();
         }
 
-        // Metoda obsługi zmiany hasła w PasswordBox
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (DataContext is LoginViewModel viewModel)
+            if (DataContext is LoginViewModel viewModel && sender is PasswordBox passwordBox)
             {
-                var passwordBox = sender as PasswordBox;
-                if (passwordBox != null)
-                {
-                    viewModel.Password = passwordBox.Password;
-                }
+                viewModel.Password = passwordBox.Password;
             }
         }
     }

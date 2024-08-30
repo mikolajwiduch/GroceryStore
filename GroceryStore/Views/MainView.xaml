@@ -1,17 +1,13 @@
 ﻿<Window x:Class="GroceryStore.Views.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:GroceryStore.Views"
-        xmlns:viewModels="clr-namespace:GroceryStore.ViewModels"
-        Title="MainView" Height="300" Width="400">
-    <Window.DataContext>
-        <viewModels:MainViewModel />
-    </Window.DataContext>
+        xmlns:views="clr-namespace:GroceryStore.Views"
+        Title="Main" Height="300" Width="400">
     <Grid>
-        <DockPanel>
-            <Button Content="Products" Command="{Binding NavigateToProductsCommand}" DockPanel.Dock="Top" />
-            <Button Content="Order" Command="{Binding NavigateToOrderCommand}" DockPanel.Dock="Top" />
+        <StackPanel>
+            <Button Content="Products" Command="{Binding NavigateToProductsCommand}" />
+            <Button Content="Order" Command="{Binding NavigateToOrderCommand}" />
             <ContentControl Content="{Binding CurrentView}" />
-        </DockPanel>
+        </StackPanel>
     </Grid>
 </Window>
