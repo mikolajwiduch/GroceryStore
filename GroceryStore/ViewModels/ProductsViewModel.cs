@@ -15,7 +15,7 @@ namespace GroceryStore.ViewModels
 
         public ProductsViewModel(ObservableCollection<Product> cart)
         {
-            Cart = cart;
+            Cart = cart ?? new ObservableCollection<Product>();
             Products = LoadProducts("Data/products.csv");
             AddToCartCommand = new RelayCommand(AddToCart);
         }
@@ -23,18 +23,15 @@ namespace GroceryStore.ViewModels
         private ObservableCollection<Product> LoadProducts(string filePath)
         {
             var products = new ObservableCollection<Product>();
-            var lines = File.ReadAllLines(filePath);
+            var lines = File.ReadAllLines(filePath).Skip(1); // Skip header
 
             foreach (var line in lines)
             {
                 var parts = line.Split(',');
-                products.Add(new Product
+                if (parts.Length == 4)
                 {
-                    Name = parts[0],
-                    Price = decimal.Parse(parts[1]),
-                    Category = parts[2], // Kategoria produktu
-                    Quantity = 1 // Domyślnie ustawiamy ilość na 1, aby użytkownik mógł zmieniać
-                });
+                    products.Add(new Product(parts[0], float.Parse(parts[1]), parts[2], int.Parse(parts[3])));
+                }
             }
 
             return products;
@@ -47,22 +44,13 @@ namespace GroceryStore.ViewModels
                 var existingProduct = Cart.FirstOrDefault(p => p.Name == product.Name);
                 if (existingProduct != null)
                 {
-                    // Jeśli produkt już jest w koszyku, zwiększamy jego ilość
                     existingProduct.Quantity++;
                 }
                 else
                 {
-                    // Jeśli produkt nie jest w koszyku, dodajemy go
-                    Cart.Add(new Product
-                    {
-                        Name = product.Name,
-                        Price = product.Price,
-                        Category = product.Category,
-                        Quantity = 1 // Domyślnie dodajemy 1 sztukę
-                    });
+                    Cart.Add(new Product(product.Name, product.Price, product.Category, 1));
                 }
 
-                // Powiadamiamy o zmianie
                 OnPropertyChanged(nameof(Cart));
             }
         }

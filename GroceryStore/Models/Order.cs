@@ -5,7 +5,7 @@ namespace GroceryStore.Models
     public class Order
     {
         public List<Product> Products { get; private set; }
-        public decimal TotalPrice => Products.Sum(p => p.Price * p.Quantity);
+        public float TotalPrice => Products.Sum(p => p.Price * p.Quantity);
 
         public Order()
         {

@@ -1,44 +1,47 @@
-﻿using GroceryStore.Models;
-using GroceryStore.ViewModels;
+﻿// File: ViewModels/MainViewModel.cs
+using GroceryStore.Models;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
 
-public class MainViewModel : BaseViewModel
+namespace GroceryStore.ViewModels
 {
-    public ObservableCollection<IProduct> Products { get; set; }
-    public ObservableCollection<IProduct> Cart { get; set; }
-    public ICommand AddToCartCommand { get; }
-
-    public MainViewModel()
+    public class MainViewModel : BaseViewModel
     {
-        Products = new ObservableCollection<IProduct>();
-        Cart = new ObservableCollection<IProduct>();
-        LoadProducts();
-        AddToCartCommand = new RelayCommand(o => AddToCart((IProduct)o));
-    }
+        public ObservableCollection<IProduct> Products { get; set; }
+        public ObservableCollection<IProduct> Cart { get; set; }
+        public ICommand AddToCartCommand { get; }
 
-    private void LoadProducts()
-    {
-        string[] lines = File.ReadAllLines("Data/products.csv");
-        foreach (var line in lines.Skip(1))
+        public MainViewModel()
         {
-            var values = line.Split(',');
-            Products.Add(new Product(values[0], decimal.Parse(values[1]), values[2], int.Parse(values[3])));
+            Products = new ObservableCollection<IProduct>();
+            Cart = new ObservableCollection<IProduct>();
+            LoadProducts();
+            AddToCartCommand = new RelayCommand(param => AddToCart((IProduct)param));
         }
-    }
 
-    private void AddToCart(IProduct product)
-    {
-        var productInCart = Cart.FirstOrDefault(p => p.Name == product.Name);
-        if (productInCart != null)
+        private void LoadProducts()
         {
-            productInCart.Quantity++;
+            string[] lines = File.ReadAllLines("Data/products.csv");
+            foreach (var line in lines.Skip(1))
+            {
+                var values = line.Split(',');
+                Products.Add(new Product(values[0], float.Parse(values[1]), values[2], int.Parse(values[3])));
+            }
         }
-        else
+
+        private void AddToCart(IProduct product)
         {
-            Cart.Add(new Product(product.Name, product.Price, product.Category, 1));
+            var productInCart = Cart.FirstOrDefault(p => p.Name == product.Name);
+            if (productInCart != null)
+            {
+                productInCart.Quantity++;
+            }
+            else
+            {
+                Cart.Add(new Product(product.Name, product.Price, product.Category, 1));
+            }
         }
     }
 }

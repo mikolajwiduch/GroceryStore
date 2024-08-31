@@ -7,7 +7,7 @@ namespace GroceryStore.ViewModels
     public class OrderViewModel : BaseViewModel
     {
         public ObservableCollection<Product> Cart { get; }
-        public decimal TotalPrice => Cart.Sum(p => p.Price * p.Quantity);
+        public float TotalPrice => Cart.Sum(p => p.Price * p.Quantity);
 
         public ICommand FinalizeOrderCommand { get; }
 
