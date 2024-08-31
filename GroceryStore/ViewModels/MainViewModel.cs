@@ -1,47 +1,44 @@
-﻿using System.Collections.ObjectModel;
+﻿using GroceryStore.Models;
+using GroceryStore.ViewModels;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using System.Windows.Input;
-using GroceryStore.Models;
-using GroceryStore.Views;
 
-namespace GroceryStore.ViewModels
+public class MainViewModel : BaseViewModel
 {
-    public class MainViewModel : BaseViewModel
+    public ObservableCollection<IProduct> Products { get; set; }
+    public ObservableCollection<IProduct> Cart { get; set; }
+    public ICommand AddToCartCommand { get; }
+
+    public MainViewModel()
     {
-        private object _currentView;
-        public object CurrentView
+        Products = new ObservableCollection<IProduct>();
+        Cart = new ObservableCollection<IProduct>();
+        LoadProducts();
+        AddToCartCommand = new RelayCommand(o => AddToCart((IProduct)o));
+    }
+
+    private void LoadProducts()
+    {
+        string[] lines = File.ReadAllLines("Data/products.csv");
+        foreach (var line in lines.Skip(1))
         {
-            get => _currentView;
-            set
-            {
-                _currentView = value;
-                OnPropertyChanged();
-            }
+            var values = line.Split(',');
+            Products.Add(new Product(values[0], decimal.Parse(values[1]), values[2], int.Parse(values[3])));
         }
+    }
 
-        public ObservableCollection<Product> Cart { get; set; }
-        public ICommand NavigateToProductsCommand { get; }
-        public ICommand NavigateToOrderCommand { get; }
-
-        public MainViewModel()
+    private void AddToCart(IProduct product)
+    {
+        var productInCart = Cart.FirstOrDefault(p => p.Name == product.Name);
+        if (productInCart != null)
         {
-            Cart = new ObservableCollection<Product>();
-
-            NavigateToProductsCommand = new RelayCommand(ExecuteNavigateToProducts);
-            NavigateToOrderCommand = new RelayCommand(ExecuteNavigateToOrder);
-
-            // Ustawienie widoku startowego na listę produktów
-            ExecuteNavigateToProducts(null);
+            productInCart.Quantity++;
         }
-
-        private void ExecuteNavigateToProducts(object parameter)
+        else
         {
-            var productsViewModel = new ProductsViewModel(Cart);
-            CurrentView = new ProductView() { DataContext = productsViewModel };
-        }
-
-        private void ExecuteNavigateToOrder(object parameter)
-        {
-            CurrentView = new OrderView() { DataContext = new OrderViewModel(Cart) };
+            Cart.Add(new Product(product.Name, product.Price, product.Category, 1));
         }
     }
 }

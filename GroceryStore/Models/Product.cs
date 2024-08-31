@@ -4,33 +4,28 @@ using System.Linq;
 
 namespace GroceryStore.Models
 {
-    public class Product
+    public interface IProduct
     {
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public string Category { get; set; }
+        string Name { get; }
+        decimal Price { get; }
+        string Category { get; }
+        int Quantity { get; set; }
+    }
+
+
+    public class Product : IProduct
+    {
+        public string Name { get; private set; }
+        public decimal Price { get; private set; }
+        public string Category { get; private set; }
         public int Quantity { get; set; }
 
-        // Załaduj produkty z pliku CSV
-        public static IEnumerable<Product> LoadProducts(string filePath)
+        public Product(string name, decimal price, string category, int quantity)
         {
-            var products = new List<Product>();
-
-            foreach (var line in File.ReadLines(filePath).Skip(1)) // Pomijamy nagłówek
-            {
-                var columns = line.Split(',');
-
-                if (columns.Length == 2 && decimal.TryParse(columns[1], out var price))
-                {
-                    products.Add(new Product
-                    {
-                        Name = columns[0],
-                        Price = price
-                    });
-                }
-            }
-
-            return products;
+            Name = name;
+            Price = price;
+            Category = category;
+            Quantity = quantity;
         }
     }
 }
