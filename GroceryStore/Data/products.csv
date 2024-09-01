@@ -1,3 +1,4 @@
-Apple,50,0.50
-Banana,30,0.30
-Milk,10,1.20
+Name, Price, Category, Quantinity
+Apple,2,Fruit,100
+Bread,3,Bakery,50
+Milk,4,Dairy,30

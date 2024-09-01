@@ -1,0 +1,49 @@
+﻿<Window x:Class="GroceryStore.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:GroceryStore.ViewModels"
+        Title="MainView" Height="450" Width="800">
+    <Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <TextBlock Text="Name" Width="150" FontWeight="Bold"/>
+            <TextBlock Text="Price" Width="100" FontWeight="Bold"/>
+            <TextBlock Text="Category" Width="100" FontWeight="Bold"/>
+            <TextBlock Text="Quantity" Width="100" FontWeight="Bold"/>
+            <TextBlock Text="Add to Cart" Width="100" FontWeight="Bold"/>
+        </StackPanel>
+
+        <ListView ItemsSource="{Binding Products}" Grid.Row="1">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}" Width="150"/>
+                        <TextBlock Text="{Binding Price, StringFormat=C}" Width="100"/>
+                        <TextBlock Text="{Binding Category}" Width="100"/>
+
+                        <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="50" Margin="5,0,5,0"
+                                 PreviewTextInput="OnQuantityPreviewTextInput"
+                                 Tag="{Binding Quantity}"
+                                 TextChanged="OnQuantityTextChanged"
+                                 Background="{Binding RelativeSource={RelativeSource Self}, Path=Tag, Converter={StaticResource IsEmptyConverter}, FallbackValue=White}"/>
+
+                        <Button Content="Add to Cart" 
+                                Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                CommandParameter="{Binding}" Width="100"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button Content="View Cart" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Command="{Binding ViewCartCommand}"/>
+    </Grid>
+</Window>

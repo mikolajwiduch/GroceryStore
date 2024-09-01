@@ -1,33 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroceryStore.Models
 {
     public class User
     {
-        public string Username { get; private set; }
-        public string Password { get; private set; }
-
-        public User(string username, string password)
-        {
-            Username = username;
-            Password = password;
-        }
+        public string Username { get; set; }
+        public string Password { get; set; }
 
         public static List<User> LoadUsers(string filePath)
         {
             var users = new List<User>();
-            var lines = File.ReadAllLines(filePath);
+            var fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath);
+
+            if (!File.Exists(fullPath))
+            {
+                throw new FileNotFoundException("Plik użytkowników nie został znaleziony.", fullPath);
+            }
+
+            var lines = File.ReadAllLines(fullPath);
 
             foreach (var line in lines)
             {
                 var values = line.Split(',');
-                var user = new User(values[0], values[1]);
-                users.Add(user);
+                if (values.Length == 2)
+                {
+                    users.Add(new User { Username = values[0], Password = values[1] });
+                }
             }
 
             return users;
@@ -38,5 +38,4 @@ namespace GroceryStore.Models
             return users.Any(user => user.Username == username && user.Password == password);
         }
     }
-
 }
