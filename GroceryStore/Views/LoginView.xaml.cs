@@ -1,6 +1,6 @@
-﻿using GroceryStore.ViewModels;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using GroceryStore.ViewModels;
 
 namespace GroceryStore.Views
 {
@@ -14,9 +14,10 @@ namespace GroceryStore.Views
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (DataContext is LoginViewModel viewModel && sender is PasswordBox passwordBox)
+            var passwordBox = sender as PasswordBox;
+            if (DataContext is LoginViewModel loginViewModel)
             {
-                viewModel.Password = passwordBox.Password;
+                loginViewModel.Password = passwordBox.Password;
             }
         }
     }

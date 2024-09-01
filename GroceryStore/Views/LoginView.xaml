@@ -6,8 +6,7 @@
         <StackPanel>
             <TextBox Width="200" Margin="10" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
             <PasswordBox Width="200" Margin="10" PasswordChanged="PasswordBox_PasswordChanged" />
-            <Button Content="Login" Width="100" Margin="10" Command="{Binding LoginCommand}" />
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" Margin="10"/>
+            <Button Width="100" Margin="10" Content="Login" Command="{Binding LoginCommand}" />
         </StackPanel>
     </Grid>
 </Window>
